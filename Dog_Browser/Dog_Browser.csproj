@@ -5,6 +5,16 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\cloud.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\cloud.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\cloud.ico" />
+    <Resource Include="Assets\cloud.png" />
+  </ItemGroup>
 
 </Project>
