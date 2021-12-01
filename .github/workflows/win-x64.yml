@@ -43,7 +43,7 @@ jobs:
       run: dotnet test
 
     - name: Publish
-      run: dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:EnableCompressionInSingleFile=true .\Dog_Browser
+      run: dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:IncludeAllContentForSelfExtract=true .\Dog_Browser
 
     # Upload the output
     - name: Upload build artifacts
