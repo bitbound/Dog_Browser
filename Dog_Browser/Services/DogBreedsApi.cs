@@ -57,6 +57,7 @@ namespace Dog_Browser.Services
                     {
                         var result = Result.Ok(cachedBreeds);
                         ReceivedAllBreeds?.Invoke(this, new(result, true));
+                        _logger.LogInformation("Breeds list resolved from cache.");
                         return;
                     }
 
@@ -70,10 +71,13 @@ namespace Dog_Browser.Services
 
                         var result = Result.Ok(breeds);
                         ReceivedAllBreeds?.Invoke(this, new(result, false));
+                        _logger.LogInformation("Breeds list successfully retrieved from API.");
                     }
                     else
                     {
-                        var result = Result.Fail<DogBreed[]>($"API call failed with code {response?.Code}.");
+                        var msg = $"API call failed with code {response?.Code}.";
+                        var result = Result.Fail<DogBreed[]>(msg);
+                        _logger.LogError(msg);
                         ReceivedAllBreeds?.Invoke(this, new(result, false));
                     }
                 }
@@ -117,6 +121,7 @@ namespace Dog_Browser.Services
                 cachedItem is DogImage cachedImage)
             {
                 ReceivedDogImage?.Invoke(this, new(Result.Ok(cachedImage), true));
+                _logger.LogInformation("Dog image resolved from cache.");
                 return;
             }
 
@@ -125,6 +130,7 @@ namespace Dog_Browser.Services
             var dogImage = new DogImage(primaryBreed, subBreed, imageBytes);
             _responseCache.Set(imageUrl, dogImage);
             ReceivedDogImage?.Invoke(this, new(Result.Ok(dogImage), false));
+            _logger.LogInformation("Dog image retrieved from API.");
         }
 
         private async Task<Result<string>> GetImageUrl(string primaryBreed, string? subBreed)

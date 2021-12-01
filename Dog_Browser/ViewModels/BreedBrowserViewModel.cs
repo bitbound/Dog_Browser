@@ -32,7 +32,6 @@ namespace Dog_Browser.ViewModels
             _dialogService = dialogService;
 
             _dogBreedsApi.ReceivedAllBreeds += DogBreedsApi_ReceivedAllBreeds;
-            _dogBreedsApi.ReceivedDogImage += DogBreedsApi_ReceivedDogImage;
 
             _dogBreedsApi.GetAllBreeds();
         }
@@ -160,10 +159,6 @@ namespace Dog_Browser.ViewModels
                 }
             });
            
-        }
-        private void DogBreedsApi_ReceivedDogImage(object? sender, ApiResponseEventArgs<DogImage> e)
-        {
-            throw new NotImplementedException();
         }
     }
 }

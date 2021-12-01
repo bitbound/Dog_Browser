@@ -1,6 +1,7 @@
 ﻿using Dog_Browser.Models;
 using Dog_Browser.Services;
 using Dog_Browser.ViewModels;
+using Dog_Browser.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,6 +32,7 @@ namespace Dog_Browser.Pages
 
         private void GroupingButton_Checked(object sender, RoutedEventArgs e)
         {
+            BreedsListView.Items.GroupDescriptions.Clear();
             var description = new PropertyGroupDescription("PrimaryBreed");
             BreedsListView.Items.GroupDescriptions.Add(description);
         }
@@ -38,6 +40,26 @@ namespace Dog_Browser.Pages
         private void GroupingButton_Unchecked(object sender, RoutedEventArgs e)
         {
             BreedsListView.Items.GroupDescriptions.Clear();
+        }
+
+        private void ListViewItem_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListViewItem item &&
+                item.DataContext is DogBreed dogBreed)
+            {
+                var detailsWindow = new BreedDetailsWindow()
+                {
+                    Owner = App.Current.MainWindow
+                };
+
+                if (detailsWindow.ViewModel is null)
+                {
+                    return;
+                }
+
+                detailsWindow.ViewModel.DogBreed = dogBreed;
+                detailsWindow.Show();
+            }
         }
     }
 }

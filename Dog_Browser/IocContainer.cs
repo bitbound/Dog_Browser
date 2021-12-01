@@ -68,6 +68,9 @@ namespace Dog_Browser
                 collection.AddSingleton<BreedBrowserViewModel>();
                 collection.AddSingleton<LogsPageViewModel>();
 
+                // We need a new instance every time for this view model.
+                collection.AddTransient<BreedDetailsViewModel>();
+
                 _serviceProvider = collection.BuildServiceProvider();
 
                 _serviceProvider

@@ -45,6 +45,8 @@ namespace Dog_Browser.Mvvm
             }
         }
 
+        public BreedDetailsViewModel BreedDetails => IocContainer.GetRequiredService<BreedDetailsViewModel>();
+
         public LogsPageViewModel LogsPage => IocContainer.GetRequiredService<LogsPageViewModel>();
 
     }

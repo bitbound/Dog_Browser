@@ -1,0 +1,34 @@
+﻿<Window x:Class="Dog_Browser.Windows.BreedDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Dog_Browser.Windows"
+        mc:Ignorable="d"
+        Title="Breed Details" Height="300" Width="400"
+        WindowStartupLocation="CenterOwner"
+        Loaded="Window_Loaded"
+        DataContext="{Binding BreedDetails, Source={StaticResource ViewModelLocator}}">
+    
+    <StackPanel>
+        <TextBlock 
+            Text="{Binding DogBreed.DisplayName}"
+            HorizontalAlignment="Center"
+            Style="{StaticResource HeaderStyle}" />
+
+        <Image Margin="5,20,5,5" 
+               Source="{Binding ImageSource}" 
+               Visibility="{Binding ImageSource, Converter={StaticResource ObjectNullToVisibilityConverter}}"/>
+
+        <StackPanel Margin="5,50,5,5" 
+                    Visibility="{Binding ImageSource, Converter={StaticResource ReverseObjectNullToVisibilityConverter}}">
+            <TextBlock Text="Loading" 
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,10"></TextBlock>
+            <ProgressBar IsIndeterminate="True"
+                         Height="10"
+                         Foreground="SteelBlue"
+                         Margin="30,0,30,0" />
+        </StackPanel>
+    </StackPanel>
+</Window>

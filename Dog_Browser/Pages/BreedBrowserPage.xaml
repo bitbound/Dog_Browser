@@ -19,9 +19,8 @@
         
         <TextBlock Grid.Row="0" 
                    x:Name="Header"
+                   Style="{StaticResource HeaderStyle}"
                    Text="Browse Dog Breeds"
-                   FontWeight="Bold"
-                   FontSize="18"
                    TextAlignment="Center"
                    Margin="0,0,0,20" />
 
@@ -33,7 +32,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0" Margin="0,0,50,0" >
+            <Grid Grid.Column="0" Margin="0,0,25,0" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
@@ -66,11 +65,17 @@
                   Grid.Row="2"
                   Padding="5,0,0,0"
                   Margin="0,5,0,0">
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Cursor" Value="Hand" />
+                    <EventSetter Event="PreviewMouseDown" Handler="ListViewItem_PreviewMouseDown" />
+                </Style>
+            </ListView.ItemContainerStyle>
             
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding DisplayName}"
-                               Cursor="Hand"
                                FontSize="16"
                                Margin="10, 5" />
                 </DataTemplate>

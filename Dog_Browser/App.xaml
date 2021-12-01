@@ -3,13 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Dog_Browser"
              xmlns:mvvm="clr-namespace:Dog_Browser.Mvvm"
-             StartupUri="MainWindow.xaml">
+             xmlns:converters="clr-namespace:Dog_Browser.Converters"
+             StartupUri="Windows\MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <mvvm:ViewModelLocator x:Key="ViewModelLocator" />
-            
+            <converters:ObjectNullToVisibilityConverter x:Key="ObjectNullToVisibilityConverter" />
+            <converters:ReverseObjectNullToVisibilityConverter x:Key="ReverseObjectNullToVisibilityConverter" />
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ResourceDictionaries/ButtonStyles.xaml" />
+                <ResourceDictionary Source="/ResourceDictionaries/TextStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

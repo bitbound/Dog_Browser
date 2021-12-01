@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Dog_Browser
+namespace Dog_Browser.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

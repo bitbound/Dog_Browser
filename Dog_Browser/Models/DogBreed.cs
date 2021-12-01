@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dog_Browser.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,10 +24,10 @@ namespace Dog_Browser.Models
         {
             if (string.IsNullOrWhiteSpace(SubBreed))
             {
-                return PrimaryBreed;
+                return PrimaryBreed.ToCapitalCase();
             }
 
-            return $"{SubBreed} {PrimaryBreed}";
+            return $"{SubBreed} {PrimaryBreed}".ToCapitalCase();
         }
     }
 }

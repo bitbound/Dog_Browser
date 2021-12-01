@@ -9,7 +9,7 @@
       Title="AboutPage">
 
     <StackPanel>
-        <TextBlock Text="Dog Browser" Grid.ColumnSpan="2" FontWeight="Bold" FontSize="15" Margin="0,0,0,10"/>
+        <TextBlock Text="Dog Browser" Grid.ColumnSpan="2" Style="{StaticResource HeaderStyle}" Margin="0,0,0,10"/>
         <TextBlock Margin="0,0,0,20">
             <Run Text="Version: " />
             <Run Text="{Binding Version, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AboutPage}}}" />
