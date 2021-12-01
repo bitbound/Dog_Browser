@@ -11,3 +11,6 @@ git clone https://github.com/lucent-sea/Dog_Browser
 cd ./Dog_Browser/Dog_Browser
 dotnet run
 ```
+
+### Screenshot
+![Dog Browser Screenshot](DogBrowser.png)
