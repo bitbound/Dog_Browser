@@ -15,7 +15,13 @@ namespace Dog_Browser.Services
 
         Stream CreateFile(string filePath);
 
+        bool DirectoryExists(string dirPath);
+
+        IEnumerable<string> EnumerateFiles(string dirPath);
+
         bool FileExists(string filePath);
+        string[] ReadAllLines(string filePath);
+        string ReadAllText(string filePath);
     }
 
     public class FileSystem : IFileSystem
@@ -35,9 +41,29 @@ namespace Dog_Browser.Services
             return File.Create(filePath);
         }
 
+        public bool DirectoryExists(string dirPath)
+        {
+            return Directory.Exists(dirPath);
+        }
+
+        public IEnumerable<string> EnumerateFiles(string dirPath)
+        {
+            return Directory.EnumerateFiles(dirPath);
+        }
+
         public bool FileExists(string filePath)
         {
             return File.Exists(filePath);
+        }
+
+        public string[] ReadAllLines(string filePath)
+        {
+            return File.ReadAllLines(filePath);
+        }
+
+        public string ReadAllText(string filePath)
+        {
+            return File.ReadAllText(filePath);
         }
     }
 }

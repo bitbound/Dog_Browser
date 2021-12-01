@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Dog_Browser.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AdoptionPage">
+      Title="Adopt a Pet">
 
     <Grid>
         <TextBlock Text="TODO" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
