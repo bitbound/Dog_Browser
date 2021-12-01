@@ -73,6 +73,9 @@ namespace Dog_Browser.Services
                     new string[] { _scopeStack.First(), _scopeStack.First() } :
                     Array.Empty<string>();
 
+                // Instead of writing directly to the file system here, we'll queue the entries
+                // and let a separate thread sink them to disk.  That way, we won't get thread-locked
+                // here while waiting for all entries to be written.
                 var message = FormatLogEntry(logLevel, _categoryName, $"{state}", exception, scopeStack);
                 _logQueue.Enqueue(message);
                 _sinkTimer.Start();

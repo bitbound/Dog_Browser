@@ -73,6 +73,7 @@ namespace Dog_Browser
 
                 _serviceProvider = collection.BuildServiceProvider();
 
+                // Add a logging provider to log to the file system.
                 _serviceProvider
                     .GetRequiredService<ILoggerFactory>()
                     .AddProvider(new FileLoggerProvider(_serviceProvider));

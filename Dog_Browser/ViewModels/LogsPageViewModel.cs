@@ -52,6 +52,8 @@ namespace Dog_Browser.ViewModels
             try
             {
                 var filePath = Path.Combine(_logsDirectory, SelectedLogName);
+                // For a production app, I'd parse these into objects that could be
+                // queried and sorted.  Or, at the bare minimum, add pagination to this.
                 CurrentLogContents = _fileSystem.ReadAllText(filePath);
 
             }
