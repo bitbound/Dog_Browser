@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dog_Browser.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,21 @@ namespace Dog_Browser
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public MainWindowViewModel? ViewModel => DataContext as MainWindowViewModel;
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ViewModel?.SelectedNavItem?.PageName is not null)
+            {
+                var pageName = $"Dog_Browser.Pages.{ViewModel.SelectedNavItem.PageName}";
+                var pageType = Type.GetType(pageName);
+                if (pageType is not null)
+                {
+                    NavigationFrame?.Navigate(Activator.CreateInstance(pageType));
+                }
+            }
         }
     }
 }

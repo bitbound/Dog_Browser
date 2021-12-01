@@ -5,6 +5,13 @@
              xmlns:mvvm="clr-namespace:Dog_Browser.Mvvm"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <mvvm:ViewModelLocator x:Key="ViewModelLocator" />
+        <ResourceDictionary>
+            <mvvm:ViewModelLocator x:Key="ViewModelLocator" />
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ResourceDictionaries/ButtonStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
     </Application.Resources>
 </Application>

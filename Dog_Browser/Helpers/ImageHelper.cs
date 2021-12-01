@@ -20,7 +20,6 @@ namespace Dog_Browser.Helpers
             bitmap.StreamSource = ms;
             bitmap.CacheOption = BitmapCacheOption.OnLoad;
             bitmap.EndInit();
-            //bitmap.Freeze();
 
             return bitmap;
         }

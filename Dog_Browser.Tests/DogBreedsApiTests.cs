@@ -18,7 +18,6 @@ namespace Dog_Browser.Tests
 {
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8604 // Possible null reference argument.
-#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
     [TestClass]
     public class DogBreedsApiTests
     {
@@ -76,8 +75,9 @@ namespace Dog_Browser.Tests
                 Times.Once);
             httpClientWrapper.VerifyNoOtherCalls();
         }
+
+        // TODO: Test GetRandomImage method in similar fashion to above.
     }
-#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
 #pragma warning restore CS8604 // Possible null reference argument.
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 }

@@ -56,6 +56,7 @@ namespace Dog_Browser
                 collection.AddSingleton<IFileSystem, FileSystem>();
                 collection.AddSingleton<ISystemTime, SystemTime>();
 
+                collection.AddScoped<IHttpClientWrapper, HttpClientWrapper>();
                 collection.AddScoped<IDogBreedsApi, DogBreedsApi>();
 
                 collection.AddSingleton<MainWindowViewModel>();

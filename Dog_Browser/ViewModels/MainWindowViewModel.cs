@@ -1,8 +1,7 @@
-﻿using Dog_Browser.Helpers;
-using Dog_Browser.Mvvm;
-using Dog_Browser.Services;
+﻿using Dog_Browser.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,32 +11,28 @@ namespace Dog_Browser.ViewModels
 {
     public class MainWindowViewModel : ObservableObject
     {
-        private BitmapSource? _currentImage;
+        private NavigationMenuItem? _selectedNavItem;
 
-        public MainWindowViewModel(IDogBreedsApi dogBreedsApi)
+        public MainWindowViewModel()
         {
-            dogBreedsApi.ReceivedAllBreeds += (s, e) =>
-            {
-                var test = e;
-            };
-
-            dogBreedsApi.ReceivedDogImage += (s, e) =>
-            {
-                App.Current.Dispatcher.Invoke(() =>
-                {
-                    CurrentImage = ImageHelper.CreateImageSource(e.Result.Value.ImageBytes);
-                });
-                
-            };
-
-            _ = dogBreedsApi.GetAllBreeds();
-            _ = dogBreedsApi.GetRandomImage("pug");
+            AddMenuItems();
+            SelectedNavItem = NavMenuItems.First();
         }
 
-        public BitmapSource? CurrentImage
+        private void AddMenuItems()
         {
-            get => _currentImage;
-            set => SetProperty(ref _currentImage, value);
+            NavMenuItems.Add(new("Dog Browser", "DogBrowserPage"));
+            NavMenuItems.Add(new("Adopt a Pet", "AdoptionPage"));
+            NavMenuItems.Add(new("Logs", "LogsPage"));
+            NavMenuItems.Add(new("About", "AboutPage"));
+        }
+
+        public ObservableCollection<NavigationMenuItem> NavMenuItems { get; } = new();
+
+        public NavigationMenuItem? SelectedNavItem
+        {
+            get => _selectedNavItem;
+            set => SetProperty(ref _selectedNavItem, value);
         }
     }
 }

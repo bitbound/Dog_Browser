@@ -23,16 +23,16 @@ namespace Dog_Browser.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public Task<byte[]> GetByteArrayAsync(string url)
+        public async Task<byte[]> GetByteArrayAsync(string url)
         {
             using var httpClient = _httpClientFactory.CreateClient();
-            return httpClient.GetByteArrayAsync(url);
+            return await httpClient.GetByteArrayAsync(url);
         }
 
-        public Task<T?> GetFromJsonAsync<T>(string url)
+        public async Task<T?> GetFromJsonAsync<T>(string url)
         {
             using var httpClient = _httpClientFactory.CreateClient();
-            return httpClient.GetFromJsonAsync<T>(url);
+            return await httpClient.GetFromJsonAsync<T>(url);
         }
     }
 }

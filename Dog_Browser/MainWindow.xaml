@@ -4,13 +4,40 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dog_Browser"
+        xmlns:vm="clr-namespace:Dog_Browser.ViewModels"
         mc:Ignorable="d"
         Title="Dog Browser" 
-        Height="450" Width="800" 
+        Height="400" Width="600"
         Icon="/Assets/cloud.png"
+        d:DataContext="{x:Null}"
         DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}">
 
     <Grid>
-        <Image Source="{Binding CurrentImage}" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="125" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <ListBox Grid.Column="0"
+                 BorderThickness="0"
+                 ItemsSource="{Binding NavMenuItems}"
+                 SelectedItem="{Binding SelectedNavItem, Mode=TwoWay}"
+                 HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 SelectionChanged="ListBox_SelectionChanged">
+            
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:NavigationMenuItem}">
+                    <TextBlock Text="{Binding Label}" Margin="0,20,0,20"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Frame x:Name="NavigationFrame" 
+               NavigationUIVisibility="Hidden"
+               Padding="20"
+               Grid.Column="1">
+            
+        </Frame>
     </Grid>
 </Window>
