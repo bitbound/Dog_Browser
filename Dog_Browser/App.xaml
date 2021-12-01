@@ -2,8 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Dog_Browser"
+             xmlns:mvvm="clr-namespace:Dog_Browser.Mvvm"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <mvvm:ViewModelLocator x:Key="ViewModelLocator" />
     </Application.Resources>
 </Application>

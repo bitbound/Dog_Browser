@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dog_Browser"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Icon="/Assets/cloud.png" >
-    <Grid>
+        Title="Dog Browser" 
+        Height="450" Width="800" 
+        Icon="/Assets/cloud.png"
+        DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}">
 
+    <Grid>
+        
     </Grid>
 </Window>

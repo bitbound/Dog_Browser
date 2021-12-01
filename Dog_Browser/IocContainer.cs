@@ -1,4 +1,5 @@
 ﻿using Dog_Browser.Services;
+using Dog_Browser.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,26 +20,20 @@ namespace Dog_Browser
         public static T GetRequiredService<T>()
             where T: notnull
         {
-            if (_serviceProvider is null)
-            {
-                throw new Exception("ServiceProvider has not been configured yet.");
-            }
-
-            return _serviceProvider.GetRequiredService<T>();
+            return GetServiceProvider().GetRequiredService<T>();
         }
 
-        public static void BuildServices()
+        private static IServiceProvider GetServiceProvider()
         {
             try
             {
                 // Prevent race conditions if this method is somehow called from different threads.
                 // A simple lock statement would work too.
-
                 _buildLock.Wait();
 
                 if (_serviceProvider is not null)
                 {
-                    return;
+                    return _serviceProvider;
                 }
 
                 var collection = new ServiceCollection();
@@ -57,12 +52,15 @@ namespace Dog_Browser
                 collection.AddSingleton<IFileSystem, FileSystem>();
                 collection.AddSingleton<ISystemTime, SystemTime>();
 
+                collection.AddScoped<MainWindowViewModel>();
+
                 _serviceProvider = collection.BuildServiceProvider();
 
                 _serviceProvider
                     .GetRequiredService<ILoggerFactory>()
                     .AddProvider(new FileLoggerProvider(_serviceProvider));
 
+                return _serviceProvider;
             }
             finally
             {
