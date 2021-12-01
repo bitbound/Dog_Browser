@@ -10,6 +10,8 @@
             <mvvm:ViewModelLocator x:Key="ViewModelLocator" />
             <converters:ObjectNullToVisibilityConverter x:Key="ObjectNullToVisibilityConverter" />
             <converters:ReverseObjectNullToVisibilityConverter x:Key="ReverseObjectNullToVisibilityConverter" />
+            <converters:CollectionEmptyToVisibilityConverter x:Key="CollectionEmptyToVisibilityConverter" />
+            <converters:ReverseCollectionEmptyToVisibilityConverter x:Key="ReverseCollectionEmptyToVisibilityConverter" />
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ResourceDictionaries/ButtonStyles.xaml" />

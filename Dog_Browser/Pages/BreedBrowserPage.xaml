@@ -59,10 +59,25 @@
                           FontFamily="Segoe MDL2 Assets" />
         </Grid>
 
+        <!-- Loading UI -->
+        <StackPanel Grid.Row="2"
+              Visibility="{Binding DogBreeds, Converter={StaticResource ReverseCollectionEmptyToVisibilityConverter}}">
 
+            <TextBlock Text="Loading" 
+                       HorizontalAlignment="Center"
+                       Margin="0,50,0,10" />
+
+            <ProgressBar IsIndeterminate="True"
+                         Height="10"
+                         Foreground="SteelBlue"
+                         Margin="30,0,30,0" />
+        </StackPanel>
+
+        <!-- The List -->
         <ListView x:Name="BreedsListView"
-                  ItemsSource="{Binding DogBreeds}"
                   Grid.Row="2"
+                  ItemsSource="{Binding DogBreeds}"
+                  Visibility="{Binding DogBreeds, Converter={StaticResource CollectionEmptyToVisibilityConverter}}"
                   Padding="5,0,0,0"
                   Margin="0,5,0,0">
 
@@ -72,7 +87,7 @@
                     <EventSetter Event="PreviewMouseDown" Handler="ListViewItem_PreviewMouseDown" />
                 </Style>
             </ListView.ItemContainerStyle>
-            
+
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding DisplayName}"
@@ -92,6 +107,5 @@
             </ListView.GroupStyle>
 
         </ListView>
-
     </Grid>
 </Page>

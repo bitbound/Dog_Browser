@@ -157,6 +157,9 @@ namespace Dog_Browser.ViewModels
                 {
                     DogBreeds.Add(dogBreed);
                 }
+
+                // This will update the loading UI.
+                NotifyPropertyChanged(nameof(DogBreeds));
             });
            
         }
