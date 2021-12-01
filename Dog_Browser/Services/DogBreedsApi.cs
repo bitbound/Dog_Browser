@@ -16,8 +16,8 @@ namespace Dog_Browser.Services
 {
     public interface IDogBreedsApi
     {
-        event EventHandler<Result<DogBreed[]>> ReceivedAllBreeds;
-        event EventHandler<Result<DogImage>>? ReceivedDogImage;
+        event EventHandler<ApiResponseEventArgs<DogBreed[]>> ReceivedAllBreeds;
+        event EventHandler<ApiResponseEventArgs<DogImage>>? ReceivedDogImage;
         Task GetAllBreeds();
         Task GetRandomImage(string primaryBreed, string? subBreed = null);
     }
@@ -27,21 +27,21 @@ namespace Dog_Browser.Services
         // This could go in a config file or something.
         private readonly string _allBreedsEndpoint = "https://dog.ceo/api/breeds/list/all";
 
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHttpClientWrapper _httpClientWrapper;
         private readonly ILogger<DogBreedsApi> _logger;
 
         // Normally, I'd break this cache out into a separate service so it could be tested.
         private readonly MemoryCache _responseCache = new(new MemoryCacheOptions());
         private readonly ISystemTime _systemTime;
-        public DogBreedsApi(IHttpClientFactory httpClientFactory, ISystemTime systemTime, ILogger<DogBreedsApi> logger)
+        public DogBreedsApi(IHttpClientWrapper httpClientWrapper, ISystemTime systemTime, ILogger<DogBreedsApi> logger)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClientWrapper = httpClientWrapper;
             _systemTime = systemTime;
             _logger = logger;
         }
 
-        public event EventHandler<Result<DogBreed[]>>? ReceivedAllBreeds;
-        public event EventHandler<Result<DogImage>>? ReceivedDogImage;
+        public event EventHandler<ApiResponseEventArgs<DogBreed[]>>? ReceivedAllBreeds;
+        public event EventHandler<ApiResponseEventArgs<DogImage>>? ReceivedDogImage;
 
         // Typically, I'd use async/await on API calls, so it still wouldn't tie
         // up the thread from which it was called.  I'm calling it this way because
@@ -55,30 +55,33 @@ namespace Dog_Browser.Services
                     if (_responseCache.TryGetValue(_allBreedsEndpoint, out var cachedItem) &&
                         cachedItem is DogBreed[] cachedBreeds)
                     {
-                        ReceivedAllBreeds?.Invoke(this, Result.Ok(cachedBreeds));
+                        var result = Result.Ok(cachedBreeds);
+                        ReceivedAllBreeds?.Invoke(this, new(result, true));
                         return;
                     }
 
-                    using var httpClient = _httpClientFactory.CreateClient();
-
-                    var response = await httpClient.GetFromJsonAsync<ApiResponseResult<Dictionary<string, string[]>>>(_allBreedsEndpoint);
+                    var response = await _httpClientWrapper.GetFromJsonAsync<ApiResponseResult<Dictionary<string, string[]>>>(_allBreedsEndpoint);
 
                     if (response?.Status == ApiResponseStatus.Success &&
                         response.Message?.Any() == true)
                     {
-                        var breeds = ApiResultsTransformer.ConvertAllBreedsResponse(response.Message);
+                        var breeds = ApiResultsHelper.ConvertAllBreedsResponse(response.Message);
                         _responseCache.Set(_allBreedsEndpoint, breeds, _systemTime.Now.AddHours(1));
-                        ReceivedAllBreeds?.Invoke(this, Result.Ok(breeds));
+
+                        var result = Result.Ok(breeds);
+                        ReceivedAllBreeds?.Invoke(this, new(result, false));
                     }
                     else
                     {
-                        ReceivedAllBreeds?.Invoke(this, Result.Fail<DogBreed[]>($"API call failed with code {response?.Code}."));
+                        var result = Result.Fail<DogBreed[]>($"API call failed with code {response?.Code}.");
+                        ReceivedAllBreeds?.Invoke(this, new(result, false));
                     }
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error while getting all dog breeds.");
-                    ReceivedAllBreeds?.Invoke(this, Result.Fail<DogBreed[]>(ex));
+                    var result = Result.Fail<DogBreed[]>(ex);
+                    ReceivedAllBreeds?.Invoke(this, new(result, false));
                 }
             });
         }
@@ -102,42 +105,39 @@ namespace Dog_Browser.Services
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error while retrieving dog image.");
-                    ReceivedDogImage?.Invoke(this, Result.Fail<DogImage>("Error while retrieving dog image."));
+                    var result = Result.Fail<DogImage>("Error while retrieving dog image.");
+                    ReceivedDogImage?.Invoke(this, new(result, false));
                 }
             });
         }
 
         private async Task GetDogImage(string imageUrl, string primaryBreed, string? subBreed)
         {
-            using var httpClient = _httpClientFactory.CreateClient();
-
             if (_responseCache.TryGetValue(imageUrl, out var cachedItem) &&
                 cachedItem is DogImage cachedImage)
             {
-                ReceivedDogImage?.Invoke(this, Result.Ok(cachedImage));
+                ReceivedDogImage?.Invoke(this, new(Result.Ok(cachedImage), true));
                 return;
             }
 
-            var imageBytes = await httpClient.GetByteArrayAsync(imageUrl);
+            var imageBytes = await _httpClientWrapper.GetByteArrayAsync(imageUrl);
 
             var dogImage = new DogImage(primaryBreed, subBreed, imageBytes);
             _responseCache.Set(imageUrl, dogImage);
-            ReceivedDogImage?.Invoke(this, Result.Ok(dogImage));
+            ReceivedDogImage?.Invoke(this, new(Result.Ok(dogImage), false));
         }
 
         private async Task<Result<string>> GetImageUrl(string primaryBreed, string? subBreed)
         {
             var endpoint = GetRandomImageEndpoint(primaryBreed, subBreed);
 
-            using var httpClient = _httpClientFactory.CreateClient();
-
-            var response = await httpClient.GetFromJsonAsync<ApiResponseResult<string>>(endpoint);
+            var response = await _httpClientWrapper.GetFromJsonAsync<ApiResponseResult<string>>(endpoint);
 
             if (response?.Status != ApiResponseStatus.Success)
             {
                 var msg = $"API call failed with code {response?.Code}.";
                 _logger.LogError(msg);
-                ReceivedDogImage?.Invoke(this, Result.Fail<DogImage>(msg));
+                ReceivedDogImage?.Invoke(this, new(Result.Fail<DogImage>(msg), false));
                 return Result.Fail<string>(msg);
             }
 
@@ -146,7 +146,7 @@ namespace Dog_Browser.Services
             if (!Uri.TryCreate(imageUrl, UriKind.Absolute, out _))
             {
                 var msg = "API did not return a valid image URL.";
-                ReceivedDogImage?.Invoke(this, Result.Fail<DogImage>(msg));
+                ReceivedDogImage?.Invoke(this, new(Result.Fail<DogImage>(msg), false));
                 _logger.LogError(msg);
                 return Result.Fail<string>(msg);
             }

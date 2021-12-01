@@ -25,7 +25,7 @@ namespace Dog_Browser.ViewModels
             {
                 App.Current.Dispatcher.Invoke(() =>
                 {
-                    CurrentImage = ImageHelper.CreateImageSource(e.Value.ImageBytes);
+                    CurrentImage = ImageHelper.CreateImageSource(e.Result.Value.ImageBytes);
                 });
                 
             };

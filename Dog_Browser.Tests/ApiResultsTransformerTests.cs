@@ -20,7 +20,7 @@ namespace Dog_Browser.Tests
         {
             var result = JsonSerializer.Deserialize<ApiResponseResult<Dictionary<string, string[]>>>(SampleData.AllBreeds);
 
-            var conversion = ApiResultsTransformer.ConvertAllBreedsResponse(result.Message);
+            var conversion = ApiResultsHelper.ConvertAllBreedsResponse(result.Message);
 
             
         }

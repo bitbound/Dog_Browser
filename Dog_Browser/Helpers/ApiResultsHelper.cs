@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Dog_Browser.Helpers
 {
-    public static class ApiResultsTransformer
+    public static class ApiResultsHelper
     {
         public static DogBreed[] ConvertAllBreedsResponse(Dictionary<string, string[]> response)
         {
