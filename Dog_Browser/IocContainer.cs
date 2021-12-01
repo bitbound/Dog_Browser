@@ -49,10 +49,16 @@ namespace Dog_Browser
                     builder.AddEventLog();
                 });
 
+                // I usually create services to abstract System.IO.File/Directory
+                // and DateTime/DateTimeOffset.  During tests, you don't want to hit
+                // the real file system, and it's often very difficult to test time-based
+                // services like schedulers without mocking system time.
                 collection.AddSingleton<IFileSystem, FileSystem>();
                 collection.AddSingleton<ISystemTime, SystemTime>();
 
-                collection.AddScoped<MainWindowViewModel>();
+                collection.AddScoped<IDogBreedsApi, DogBreedsApi>();
+
+                collection.AddSingleton<MainWindowViewModel>();
 
                 _serviceProvider = collection.BuildServiceProvider();
 

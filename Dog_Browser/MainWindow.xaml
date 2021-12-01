@@ -11,6 +11,6 @@
         DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}">
 
     <Grid>
-        
+        <Image Source="{Binding CurrentImage}" />
     </Grid>
 </Window>

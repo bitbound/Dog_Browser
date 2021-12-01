@@ -5,6 +5,13 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dog_Browser", "Dog_Browser\Dog_Browser.csproj", "{6FF1AA31-476B-4714-8BC0-534A40C3B408}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dog_Browser.Tests", "Dog_Browser.Tests\Dog_Browser.Tests.csproj", "{EAE5E2E6-B3FE-4872-8DEC-8F4D928E1B12}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{547AA7D6-1CA4-47C5-B400-06E701B1DDA3}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,10 @@ Global
 		{6FF1AA31-476B-4714-8BC0-534A40C3B408}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FF1AA31-476B-4714-8BC0-534A40C3B408}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FF1AA31-476B-4714-8BC0-534A40C3B408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAE5E2E6-B3FE-4872-8DEC-8F4D928E1B12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAE5E2E6-B3FE-4872-8DEC-8F4D928E1B12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAE5E2E6-B3FE-4872-8DEC-8F4D928E1B12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAE5E2E6-B3FE-4872-8DEC-8F4D928E1B12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
