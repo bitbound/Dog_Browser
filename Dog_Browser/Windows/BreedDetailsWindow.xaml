@@ -10,25 +10,40 @@
         Loaded="Window_Loaded"
         DataContext="{Binding BreedDetails, Source={StaticResource ViewModelLocator}}">
     
-    <StackPanel>
-        <TextBlock 
-            Text="{Binding DogBreed.DisplayName}"
-            HorizontalAlignment="Center"
-            Style="{StaticResource HeaderStyle}" />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="0"
+                   Text="{Binding DogBreed.DisplayName}"
+                   HorizontalAlignment="Center"
+                   Style="{StaticResource HeaderStyle}" />
 
-        <Image Margin="5,20,5,5" 
-               Source="{Binding ImageSource}" 
-               Visibility="{Binding ImageSource, Converter={StaticResource ObjectNullToVisibilityConverter}}"/>
+        <ScrollViewer Grid.Row="1"
+                      Margin="5,20,5,5" 
+                      VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Image HorizontalAlignment="Stretch"
+                       Source="{Binding ImageSource}" 
+                       Visibility="{Binding ImageSource, Converter={StaticResource ObjectNullToVisibilityConverter}}"/>
 
-        <StackPanel Margin="5,50,5,5" 
-                    Visibility="{Binding ImageSource, Converter={StaticResource ReverseObjectNullToVisibilityConverter}}">
-            <TextBlock Text="Loading" 
+
+                <StackPanel Visibility="{Binding ImageSource, Converter={StaticResource ReverseObjectNullToVisibilityConverter}}">
+                    <TextBlock Text="Loading" 
                        HorizontalAlignment="Center"
-                       Margin="0,0,0,10"></TextBlock>
-            <ProgressBar IsIndeterminate="True"
+                       Margin="0,0,0,10" />
+
+                    <ProgressBar IsIndeterminate="True"
                          Height="10"
                          Foreground="SteelBlue"
                          Margin="30,0,30,0" />
-        </StackPanel>
-    </StackPanel>
+                </StackPanel>
+            </Grid>
+            
+            
+        </ScrollViewer>
+        
+    </Grid>
 </Window>

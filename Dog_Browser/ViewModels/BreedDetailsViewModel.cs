@@ -27,6 +27,8 @@ namespace Dog_Browser.ViewModels
             _dogBreedsApi.ReceivedDogImage += DogBreedsApi_ReceivedDogImage;
         }
 
+        public Guid Id { get; } = Guid.NewGuid();
+
         public DogBreed? DogBreed
         {
             get => _dogBreed;
@@ -46,7 +48,7 @@ namespace Dog_Browser.ViewModels
                 return;
             }
 
-            _dogBreedsApi.GetRandomImage(DogBreed.PrimaryBreed, DogBreed.SubBreed);
+            _dogBreedsApi.GetRandomImage(Id, DogBreed.PrimaryBreed, DogBreed.SubBreed);
         }
         private void DogBreedsApi_ReceivedDogImage(object? sender, BaseTypes.ApiResponseEventArgs<DogImage> e)
         {
@@ -63,8 +65,9 @@ namespace Dog_Browser.ViewModels
 
             var dogImage = e.Result.Value;
 
-            if (dogImage.PrimaryBreed != DogBreed?.PrimaryBreed ||
-                dogImage.SubBreed != DogBreed?.SubBreed)
+            // We might have multiple windows open of the same breed.
+            // Only act on API calls that originated from this view model.
+            if (dogImage.ViewModelId != Id)
             {
                 return;
             }

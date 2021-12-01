@@ -19,7 +19,7 @@ namespace Dog_Browser.Services
         event EventHandler<ApiResponseEventArgs<DogBreed[]>> ReceivedAllBreeds;
         event EventHandler<ApiResponseEventArgs<DogImage>>? ReceivedDogImage;
         Task GetAllBreeds();
-        Task GetRandomImage(string primaryBreed, string? subBreed = null);
+        Task GetRandomImage(Guid viewModelId, string primaryBreed, string? subBreed = null);
     }
 
     public class DogBreedsApi : IDogBreedsApi
@@ -90,7 +90,7 @@ namespace Dog_Browser.Services
             });
         }
 
-        public Task GetRandomImage(string primaryBreed, string? subBreed = null)
+        public Task GetRandomImage(Guid viewModelId, string primaryBreed, string? subBreed = null)
         {
             return Task.Run(async () =>
             {
@@ -104,7 +104,7 @@ namespace Dog_Browser.Services
                         return;
                     }
 
-                    await GetDogImage(imageUrlResult.Value, primaryBreed, subBreed);
+                    await GetDogImage(viewModelId, imageUrlResult.Value, primaryBreed, subBreed);
                 }
                 catch (Exception ex)
                 {
@@ -115,20 +115,21 @@ namespace Dog_Browser.Services
             });
         }
 
-        private async Task GetDogImage(string imageUrl, string primaryBreed, string? subBreed)
+        private async Task GetDogImage(Guid viewModelId, string imageUrl, string primaryBreed, string? subBreed)
         {
             if (_responseCache.TryGetValue(imageUrl, out var cachedItem) &&
-                cachedItem is DogImage cachedImage)
+                cachedItem is byte[] cachedImage)
             {
-                ReceivedDogImage?.Invoke(this, new(Result.Ok(cachedImage), true));
+                var cachedDogImage = new DogImage(viewModelId, primaryBreed, subBreed, cachedImage);
+                ReceivedDogImage?.Invoke(this, new(Result.Ok(cachedDogImage), true));
                 _logger.LogInformation("Dog image resolved from cache.");
                 return;
             }
 
             var imageBytes = await _httpClientWrapper.GetByteArrayAsync(imageUrl);
 
-            var dogImage = new DogImage(primaryBreed, subBreed, imageBytes);
-            _responseCache.Set(imageUrl, dogImage);
+            var dogImage = new DogImage(viewModelId, primaryBreed, subBreed, imageBytes);
+            _responseCache.Set(imageUrl, imageBytes);
             ReceivedDogImage?.Invoke(this, new(Result.Ok(dogImage), false));
             _logger.LogInformation("Dog image retrieved from API.");
         }

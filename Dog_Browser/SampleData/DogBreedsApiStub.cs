@@ -20,7 +20,7 @@ namespace Dog_Browser.SampleData
             return Task.CompletedTask;
         }
 
-        public Task GetRandomImage(string primaryBreed, string? subBreed = null)
+        public Task GetRandomImage(Guid viewModelId, string primaryBreed, string? subBreed = null)
         {
             return Task.CompletedTask;
         }

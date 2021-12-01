@@ -10,15 +10,17 @@ namespace Dog_Browser.Models
 {
     public class DogImage
     {
-        public DogImage(string primaryBreed, string? subBreed, byte[] imageBytes)
+        public DogImage(Guid viewModelId, string primaryBreed, string? subBreed, byte[] imageBytes)
         {
+            ViewModelId = viewModelId;
             PrimaryBreed = primaryBreed;
             SubBreed = subBreed;
             ImageBytes = imageBytes;
         }
 
+        public byte[] ImageBytes { get; init; }
         public string PrimaryBreed { get; init; }
         public string? SubBreed { get; init; }
-        public byte[] ImageBytes { get; init; }
+        public Guid ViewModelId { get; init; }
     }
 }
