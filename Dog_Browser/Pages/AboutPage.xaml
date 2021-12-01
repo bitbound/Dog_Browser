@@ -10,10 +10,13 @@
 
     <StackPanel>
         <TextBlock Text="Dog Browser" Grid.ColumnSpan="2" FontWeight="Bold" FontSize="15" Margin="0,0,0,10"/>
-        <TextBlock>
+        <TextBlock Margin="0,0,0,20">
             <Run Text="Version: " />
             <Run Text="{Binding Version, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AboutPage}}}" />
         </TextBlock>
-       
+
+        <Border Height="100" BorderBrush="Gray" BorderThickness="1" Padding="5">
+            <TextBlock Text="This project was created for a code challenge at an awesome company!" />
+        </Border>
     </StackPanel>
 </Page>

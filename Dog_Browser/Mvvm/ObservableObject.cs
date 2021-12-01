@@ -12,6 +12,11 @@ namespace Dog_Browser.Mvvm
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         protected void SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = "")
         {
             field = newValue;

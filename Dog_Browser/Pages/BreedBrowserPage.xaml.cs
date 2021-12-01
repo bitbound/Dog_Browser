@@ -18,9 +18,9 @@ namespace Dog_Browser.Pages
     /// <summary>
     /// Interaction logic for DogBrowserPage.xaml
     /// </summary>
-    public partial class DogBrowserPage : Page
+    public partial class BreedBrowserPage : Page
     {
-        public DogBrowserPage()
+        public BreedBrowserPage()
         {
             InitializeComponent();
         }

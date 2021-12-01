@@ -10,5 +10,7 @@ namespace Dog_Browser.Mvvm
     public class ViewModelLocator
     {
         public MainWindowViewModel MainWindow => IocContainer.GetRequiredService<MainWindowViewModel>();
+        public BreedBrowserViewModel BreedBrowser => IocContainer.GetRequiredService<BreedBrowserViewModel>();
+        public LogsPageViewModel LogsPage => IocContainer.GetRequiredService<LogsPageViewModel>();
     }
 }

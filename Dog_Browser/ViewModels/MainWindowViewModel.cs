@@ -16,12 +16,11 @@ namespace Dog_Browser.ViewModels
         public MainWindowViewModel()
         {
             AddMenuItems();
-            SelectedNavItem = NavMenuItems.First();
         }
 
         private void AddMenuItems()
         {
-            NavMenuItems.Add(new("Dog Browser", "DogBrowserPage"));
+            NavMenuItems.Add(new("Breed Browser", "BreedBrowserPage"));
             NavMenuItems.Add(new("Adopt a Pet", "AdoptionPage"));
             NavMenuItems.Add(new("Logs", "LogsPage"));
             NavMenuItems.Add(new("About", "AboutPage"));

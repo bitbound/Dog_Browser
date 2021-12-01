@@ -59,7 +59,11 @@ namespace Dog_Browser
                 collection.AddScoped<IHttpClientWrapper, HttpClientWrapper>();
                 collection.AddScoped<IDogBreedsApi, DogBreedsApi>();
 
+                // Use Singletons for Window and Page view models, so their state is
+                // persisted when navigating away and back.
                 collection.AddSingleton<MainWindowViewModel>();
+                collection.AddSingleton<BreedBrowserViewModel>();
+                collection.AddSingleton<LogsPageViewModel>();
 
                 _serviceProvider = collection.BuildServiceProvider();
 

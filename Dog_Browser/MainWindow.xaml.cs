@@ -40,5 +40,10 @@ namespace Dog_Browser
                 }
             }
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            NavigationList.SelectedIndex = 0;
+        }
     }
 }

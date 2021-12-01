@@ -1,0 +1,48 @@
+﻿<Page x:Class="Dog_Browser.Pages.BreedBrowserPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Dog_Browser.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="600"
+      Title="Breed Browser"
+      DataContext="{Binding BreedBrowser, Source={StaticResource ViewModelLocator}}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+
+            <Button Content="{Binding SortIcon}" 
+                    Width="30"
+                    ToolTip="Sort Direction" FontFamily="Segoe MDL2 Assets"
+                    Command="{Binding ToggleSortDirection}"/>
+
+            <ToggleButton Width="30"
+                          ToolTip="Group by Breed"
+                          IsChecked="{Binding IsGroupingEnabled, Mode=TwoWay}"
+                          Margin="10,0,0,0"
+                          Content="&#xF168;" 
+                          FontFamily="Segoe MDL2 Assets" />
+        </StackPanel>
+
+        <TextBlock Grid.Row="1" 
+                   Text="Browse Dog Breeds"
+                   FontWeight="Bold"
+                   FontSize="18"
+                   TextAlignment="Center"
+                   Margin="0,10,0,0" />
+
+        <ListView Grid.Row="2" Margin="0,10,0,0">
+
+        </ListView>
+
+    </Grid>
+</Page>

@@ -10,7 +10,8 @@
         Height="400" Width="600"
         Icon="/Assets/cloud.png"
         d:DataContext="{x:Null}"
-        DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}">
+        DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}"
+        Loaded="Window_Loaded">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -18,7 +19,8 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Column="0"
+        <ListBox x:Name="NavigationList" 
+                 Grid.Column="0"
                  BorderThickness="0"
                  ItemsSource="{Binding NavMenuItems}"
                  SelectedItem="{Binding SelectedNavItem, Mode=TwoWay}"
