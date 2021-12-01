@@ -3,6 +3,7 @@ using Dog_Browser.BaseTypes;
 using Dog_Browser.Dtos;
 using Dog_Browser.Helpers;
 using Dog_Browser.Models;
+using Dog_Browser.SampleData;
 using Dog_Browser.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -26,7 +27,7 @@ namespace Dog_Browser.Tests
         [TestInitialize]
         public void Init()
         {
-            _allBreedsResponse = JsonSerializer.Deserialize<ApiResponseResult<Dictionary<string, string[]>>>(SampleData.AllBreeds);
+            _allBreedsResponse = JsonSerializer.Deserialize<ApiResponseResult<Dictionary<string, string[]>>>(SampleResponses.AllBreeds);
         }
 
         [TestMethod]

@@ -9,11 +9,8 @@ namespace Dog_Browser.Mvvm
 {
     public class RelayCommand : ICommand
     {
-        private readonly Action _execute;
         private readonly Func<bool>? _canExecute;
-
-        public event EventHandler? CanExecuteChanged;
-
+        private readonly Action _execute;
         public RelayCommand(Action execute)
         {
             _execute = execute;
@@ -24,6 +21,8 @@ namespace Dog_Browser.Mvvm
             _execute = execute;
             _canExecute = canExecute;
         }
+
+        public event EventHandler? CanExecuteChanged;
 
         public bool CanExecute(object? parameter)
         {
@@ -37,14 +36,17 @@ namespace Dog_Browser.Mvvm
                 _execute?.Invoke();
             }
         }
+
+        public void NotifyCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public class RelayCommand<T> : ICommand
     {
-        private readonly Action<T?> _execute;
         private readonly Func<T?, bool>? _canExecute;
-
-        public event EventHandler? CanExecuteChanged;
+        private readonly Action<T?> _execute;
 
         public RelayCommand(Action<T?> execute)
         {
@@ -56,6 +58,8 @@ namespace Dog_Browser.Mvvm
             _execute = execute;
             _canExecute = canExecute;
         }
+
+        public event EventHandler? CanExecuteChanged;
 
         public bool CanExecute(object? parameter)
         {
@@ -73,6 +77,11 @@ namespace Dog_Browser.Mvvm
             {
                 _execute?.Invoke((T?)parameter);
             }
+        }
+
+        public void NotifyCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

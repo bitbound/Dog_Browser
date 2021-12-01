@@ -1,5 +1,6 @@
 ﻿using Dog_Browser.Dtos;
 using Dog_Browser.Helpers;
+using Dog_Browser.SampleData;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Dog_Browser.Tests
         [TestMethod]
         public void ConvertAllBreedsResponse_GivenValidDictionary_ReturnsBreeds()
         {
-            var result = JsonSerializer.Deserialize<ApiResponseResult<Dictionary<string, string[]>>>(SampleData.AllBreeds);
+            var result = JsonSerializer.Deserialize<ApiResponseResult<Dictionary<string, string[]>>>(SampleResponses.AllBreeds);
 
             var conversion = ApiResultsHelper.ConvertAllBreedsResponse(result.Message);
 

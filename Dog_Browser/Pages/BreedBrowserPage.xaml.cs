@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Dog_Browser.Models;
+using Dog_Browser.Services;
+using Dog_Browser.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +27,17 @@ namespace Dog_Browser.Pages
         public BreedBrowserPage()
         {
             InitializeComponent();
+        }
+
+        private void GroupingButton_Checked(object sender, RoutedEventArgs e)
+        {
+            var description = new PropertyGroupDescription("PrimaryBreed");
+            BreedsListView.Items.GroupDescriptions.Add(description);
+        }
+
+        private void GroupingButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            BreedsListView.Items.GroupDescriptions.Clear();
         }
     }
 }

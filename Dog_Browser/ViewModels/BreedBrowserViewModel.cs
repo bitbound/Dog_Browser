@@ -1,18 +1,64 @@
-﻿using Dog_Browser.Mvvm;
+﻿using Dog_Browser.BaseTypes;
+using Dog_Browser.Extensions;
+using Dog_Browser.Models;
+using Dog_Browser.Mvvm;
+using Dog_Browser.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Dog_Browser.ViewModels
 {
     public class BreedBrowserViewModel : ObservableObject
     {
+        private readonly IDialogService _dialogService;
+        private readonly IDogBreedsApi _dogBreedsApi;
+        private bool _isGroupingEnabled;
         private ListSortDirection _sortDirection;
         private RelayCommand? _toggleSortDirection;
-        private bool _isGroupingEnabled;
+
+        public BreedBrowserViewModel(IDogBreedsApi dogBreedsApi, IDialogService dialogService)
+        {
+            _dogBreedsApi = dogBreedsApi;
+            _dialogService = dialogService;
+
+            _dogBreedsApi.ReceivedAllBreeds += DogBreedsApi_ReceivedAllBreeds;
+            _dogBreedsApi.ReceivedDogImage += DogBreedsApi_ReceivedDogImage;
+
+            _dogBreedsApi.GetAllBreeds();
+        }
+
+        public ObservableCollection<DogBreed> DogBreeds { get; } = new();
+
+        public bool IsGroupingEnabled
+        {
+            get => _isGroupingEnabled;
+            set 
+            { 
+                SetProperty(ref _isGroupingEnabled, value);
+                NotifyPropertyChanged(nameof(GroupStyleSelector));
+            }
+        }
+
+        public GroupStyleSelector GroupStyleSelector => new GroupStyleSelector((viewGroup, level) =>
+        {
+            if (viewGroup is null)
+            {
+                return null;
+            }
+            if (viewGroup.ItemCount < 2)
+            {
+                return null;
+            }
+
+            return new GroupStyle();
+        });
 
         public ListSortDirection SortDirection
         {
@@ -21,9 +67,10 @@ namespace Dog_Browser.ViewModels
             {
                 SetProperty(ref _sortDirection, value);
                 // Update UI for sort icon when this changes.
-                NotifyPropertyChanged(nameof(SortIcon));   
+                NotifyPropertyChanged(nameof(SortIcon));
             }
         }
+
         public string SortIcon => SortDirection == ListSortDirection.Ascending ?
             char.ConvertFromUtf32(0xF0AD) :
             char.ConvertFromUtf32(0xF0AE);
@@ -44,16 +91,66 @@ namespace Dog_Browser.ViewModels
                         {
                             SortDirection = ListSortDirection.Ascending;
                         }
+                        DogBreeds.Sort(BreedComparer);
                     });
                 }
                 return _toggleSortDirection;
             }
         }
 
-        public bool IsGroupingEnabled
+
+        private void DogBreedsApi_ReceivedAllBreeds(object? sender, ApiResponseEventArgs<DogBreed[]> e)
         {
-            get => _isGroupingEnabled;
-            set => SetProperty(ref _isGroupingEnabled, value);
+            if (!e.Result.IsSuccess || e.Result.Value is null)
+            {
+                _dialogService.Show(
+                    "An error occurred while contacting the Dog Breeds server.  Please check the logs or try again later.",
+                    "Communication Failure",
+                     MessageBoxButton.OK,
+                     MessageBoxImage.Error);
+
+                return;
+            }
+
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                DogBreeds.Clear();
+
+                var breeds = e.Result.Value.ToList();
+                breeds.Sort(BreedComparer);
+
+                foreach (var dogBreed in e.Result.Value)
+                {
+                    DogBreeds.Add(dogBreed);
+                }
+            });
+           
+        }
+
+        private int BreedComparer(DogBreed a, DogBreed b)
+        {
+            if (IsGroupingEnabled)
+            {
+                // If grouping is enabled, we want to sort first by the group name (primary breed).
+                // If they differ, return the order.  Else, sort by display name.
+                var groupSort = SortDirection == ListSortDirection.Ascending ?
+                    a.PrimaryBreed.CompareTo(b.PrimaryBreed) :
+                    b.PrimaryBreed.CompareTo(a.PrimaryBreed);
+
+                if (groupSort != 0)
+                {
+                    return groupSort;
+                }
+            }
+
+            return SortDirection == ListSortDirection.Ascending ?
+                  a.DisplayName.CompareTo(b.DisplayName) :
+                  b.DisplayName.CompareTo(a.DisplayName);
+        }
+
+        private void DogBreedsApi_ReceivedDogImage(object? sender, ApiResponseEventArgs<DogImage> e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

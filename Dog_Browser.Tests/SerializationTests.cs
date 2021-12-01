@@ -1,4 +1,5 @@
 using Dog_Browser.Dtos;
+using Dog_Browser.SampleData;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Dog_Browser.Tests
         [TestMethod]
         public void Deserialize_GivenValidAllBreedsResponse_Succeeds()
         {
-            var result = JsonSerializer.Deserialize<ApiResponseResult<Dictionary<string, string[]>>>(SampleData.AllBreeds);
+            var result = JsonSerializer.Deserialize<ApiResponseResult<Dictionary<string, string[]>>>(SampleResponses.AllBreeds);
 
             Assert.AreEqual(95, result.Message.Count);
             Assert.AreEqual("golden", result.Message["retriever"].ElementAt(3));
@@ -23,7 +24,7 @@ namespace Dog_Browser.Tests
         [TestMethod]
         public void Deserialize_GivenValid404Response_Succeeds()
         {
-            var result = JsonSerializer.Deserialize<ApiResponseResult<string>>(SampleData.NotFoundResponse);
+            var result = JsonSerializer.Deserialize<ApiResponseResult<string>>(SampleResponses.NotFoundResponse);
 
             Assert.AreEqual(404, result.Code);
             Assert.AreEqual(ApiResponseStatus.Error, result.Status);

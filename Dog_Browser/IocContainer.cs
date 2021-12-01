@@ -56,6 +56,9 @@ namespace Dog_Browser
                 collection.AddSingleton<IFileSystem, FileSystem>();
                 collection.AddSingleton<ISystemTime, SystemTime>();
 
+                // Lets us mock MessageBox.Show when unit-testing view models.
+                collection.AddSingleton<IDialogService, DialogService>();
+
                 collection.AddScoped<IHttpClientWrapper, HttpClientWrapper>();
                 collection.AddScoped<IDogBreedsApi, DogBreedsApi>();
 

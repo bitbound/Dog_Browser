@@ -9,6 +9,6 @@
       Title="AdoptionPage">
 
     <Grid>
-        
+        <TextBlock Text="TODO" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
     </Grid>
 </Page>
