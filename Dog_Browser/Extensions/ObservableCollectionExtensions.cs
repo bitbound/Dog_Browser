@@ -21,5 +21,22 @@ namespace Dog_Browser.Extensions
                 self.Add(item);
             }
         }
+
+        public static void Filter<T>(this ObservableCollection<T> self, List<T> allValues, string searchText)
+        {
+            self.Clear();
+
+            IEnumerable<T> itemsToAdd = allValues.ToArray();
+
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                itemsToAdd = allValues.Where(x => x?.ToString()?.Contains(searchText, StringComparison.OrdinalIgnoreCase) ?? false);
+            }
+
+            foreach (var item in itemsToAdd)
+            {
+                self.Add(item);
+            }
+        }
     }
 }

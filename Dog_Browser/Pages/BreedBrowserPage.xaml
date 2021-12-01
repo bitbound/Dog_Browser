@@ -23,19 +23,34 @@
                    FontWeight="Bold"
                    FontSize="18"
                    TextAlignment="Center"
-                   Margin="0,10,0,0" />
+                   Margin="0,0,0,20" />
 
 
-        <StackPanel Grid.Row="1"
-                    HorizontalAlignment="Right"
-                    Orientation="Horizontal">
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-            <Button Content="{Binding SortIcon}" 
+            <Grid Grid.Column="0" Margin="0,0,50,0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Text="Search:" VerticalAlignment="Center" />
+                <TextBox Grid.Column="1" Margin="5,0,0,0" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+
+            <Button Grid.Column="1"
+                    Content="{Binding SortIcon}" 
                     Width="30"
                     ToolTip="Sort Direction" FontFamily="Segoe MDL2 Assets"
                     Command="{Binding ToggleSortDirection}"/>
 
-            <ToggleButton Width="30"
+            <ToggleButton Grid.Column="2" 
+                          Width="30"
                           ToolTip="Group by Breed"
                           IsChecked="{Binding IsGroupingEnabled, Mode=TwoWay}"
                           Checked="GroupingButton_Checked"
@@ -43,13 +58,13 @@
                           Margin="10,0,0,0"
                           Content="&#xF168;" 
                           FontFamily="Segoe MDL2 Assets" />
-        </StackPanel>
+        </Grid>
 
 
         <ListView x:Name="BreedsListView"
                   ItemsSource="{Binding DogBreeds}"
-                  GroupStyleSelector="{Binding GroupStyleSelector}"
                   Grid.Row="2"
+                  Padding="5,0,0,0"
                   Margin="0,5,0,0">
             
             <ListView.ItemTemplate>

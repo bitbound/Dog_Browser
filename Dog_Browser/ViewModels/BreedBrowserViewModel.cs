@@ -1,5 +1,6 @@
 ﻿using Dog_Browser.BaseTypes;
 using Dog_Browser.Extensions;
+using Dog_Browser.Helpers;
 using Dog_Browser.Models;
 using Dog_Browser.Mvvm;
 using Dog_Browser.Services;
@@ -17,9 +18,11 @@ namespace Dog_Browser.ViewModels
 {
     public class BreedBrowserViewModel : ObservableObject
     {
+        private readonly List<DogBreed> _allDogBreeds = new();
         private readonly IDialogService _dialogService;
         private readonly IDogBreedsApi _dogBreedsApi;
         private bool _isGroupingEnabled;
+        private string _searchText = "";
         private ListSortDirection _sortDirection;
         private RelayCommand? _toggleSortDirection;
 
@@ -39,26 +42,22 @@ namespace Dog_Browser.ViewModels
         public bool IsGroupingEnabled
         {
             get => _isGroupingEnabled;
-            set 
-            { 
+            set
+            {
                 SetProperty(ref _isGroupingEnabled, value);
                 NotifyPropertyChanged(nameof(GroupStyleSelector));
             }
         }
 
-        public GroupStyleSelector GroupStyleSelector => new GroupStyleSelector((viewGroup, level) =>
+        public string SearchText
         {
-            if (viewGroup is null)
+            get => _searchText;
+            set
             {
-                return null;
+                SetProperty(ref _searchText, value);
+                ApplySearch();
             }
-            if (viewGroup.ItemCount < 2)
-            {
-                return null;
-            }
-
-            return new GroupStyle();
-        });
+        }
 
         public ListSortDirection SortDirection
         {
@@ -98,35 +97,20 @@ namespace Dog_Browser.ViewModels
             }
         }
 
-
-        private void DogBreedsApi_ReceivedAllBreeds(object? sender, ApiResponseEventArgs<DogBreed[]> e)
+        private void ApplySearch()
         {
-            if (!e.Result.IsSuccess || e.Result.Value is null)
+            // We don't want to update with every keystroke, but we also
+            // don't want to wait for lost focus.  So we'll debounce the
+            // change event.
+            Debouncer.Debounce(TimeSpan.FromSeconds(1), () =>
             {
-                _dialogService.Show(
-                    "An error occurred while contacting the Dog Breeds server.  Please check the logs or try again later.",
-                    "Communication Failure",
-                     MessageBoxButton.OK,
-                     MessageBoxImage.Error);
-
-                return;
-            }
-
-            App.Current.Dispatcher.Invoke(() =>
-            {
-                DogBreeds.Clear();
-
-                var breeds = e.Result.Value.ToList();
-                breeds.Sort(BreedComparer);
-
-                foreach (var dogBreed in e.Result.Value)
+                App.Current.Dispatcher.Invoke(() =>
                 {
-                    DogBreeds.Add(dogBreed);
-                }
-            });
-           
-        }
+                    DogBreeds.Filter(_allDogBreeds, _searchText);
 
+                });
+            });
+        }
         private int BreedComparer(DogBreed a, DogBreed b)
         {
             if (IsGroupingEnabled)
@@ -148,6 +132,35 @@ namespace Dog_Browser.ViewModels
                   b.DisplayName.CompareTo(a.DisplayName);
         }
 
+        private void DogBreedsApi_ReceivedAllBreeds(object? sender, ApiResponseEventArgs<DogBreed[]> e)
+        {
+            if (!e.Result.IsSuccess || e.Result.Value is null)
+            {
+                _dialogService.Show(
+                    "An error occurred while contacting the Dog Breeds server.  Please check the logs or try again later.",
+                    "Communication Failure",
+                     MessageBoxButton.OK,
+                     MessageBoxImage.Error);
+
+                return;
+            }
+
+            _allDogBreeds.Clear();
+            _allDogBreeds.AddRange(e.Result.Value);
+
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                DogBreeds.Clear();
+
+                _allDogBreeds.Sort(BreedComparer);
+
+                foreach (var dogBreed in e.Result.Value)
+                {
+                    DogBreeds.Add(dogBreed);
+                }
+            });
+           
+        }
         private void DogBreedsApi_ReceivedDogImage(object? sender, ApiResponseEventArgs<DogImage> e)
         {
             throw new NotImplementedException();
