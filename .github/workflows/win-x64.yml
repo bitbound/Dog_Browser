@@ -43,11 +43,11 @@ jobs:
       run: dotnet test
 
     - name: Publish
-      run: dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true .\Dog_Browser
+      run: dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true .\Dog_Browser
 
     # Upload the output
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: MSIX Package
-        path: ${{ env.GITHUB_WORKSPACE }}\Dog_Browser\bin\Release\net6.0-windows\win-x64\publish\Dog_Browser.exe
+        name: Dog Browser
+        path: ./Dog_Browser/bin/Release/net6.0-windows/win-x64/publish/Dog_Browser.exe
