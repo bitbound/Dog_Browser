@@ -20,16 +20,18 @@ namespace Dog_Browser.ViewModels
     {
         private readonly List<DogBreed> _allDogBreeds = new();
         private readonly IDialogService _dialogService;
+        private readonly IDispatcherService _dispatcherService;
         private readonly IDogBreedsApi _dogBreedsApi;
         private bool _isGroupingEnabled;
         private string _searchText = "";
         private ListSortDirection _sortDirection;
         private RelayCommand? _toggleSortDirection;
 
-        public BreedBrowserViewModel(IDogBreedsApi dogBreedsApi, IDialogService dialogService)
+        public BreedBrowserViewModel(IDogBreedsApi dogBreedsApi, IDialogService dialogService, IDispatcherService dispatcherService)
         {
             _dogBreedsApi = dogBreedsApi;
             _dialogService = dialogService;
+            _dispatcherService = dispatcherService;
 
             _dogBreedsApi.ReceivedAllBreeds += DogBreedsApi_ReceivedAllBreeds;
 
@@ -103,7 +105,7 @@ namespace Dog_Browser.ViewModels
             // change event.
             Debouncer.Debounce(TimeSpan.FromSeconds(1), () =>
             {
-                App.Current.Dispatcher.Invoke(() =>
+                _dispatcherService.Invoke(() =>
                 {
                     DogBreeds.Filter(_allDogBreeds, _searchText);
 
@@ -147,7 +149,7 @@ namespace Dog_Browser.ViewModels
             _allDogBreeds.Clear();
             _allDogBreeds.AddRange(e.Result.Value);
 
-            App.Current.Dispatcher.Invoke(() =>
+            _dispatcherService.Invoke(() =>
             {
                 DogBreeds.Clear();
 

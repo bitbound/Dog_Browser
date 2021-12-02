@@ -15,14 +15,16 @@ namespace Dog_Browser.ViewModels
     public class BreedDetailsViewModel : ObservableObject
     {
         private readonly IDialogService _dialogService;
+        private readonly IDispatcherService _dispatcherService;
         private readonly IDogBreedsApi _dogBreedsApi;
         private DogBreed? _dogBreed;
         private BitmapImage? _imageSource;
 
-        public BreedDetailsViewModel(IDogBreedsApi dogBreedsApi, IDialogService dialogService)
+        public BreedDetailsViewModel(IDogBreedsApi dogBreedsApi, IDialogService dialogService, IDispatcherService dispatcherService)
         {
             _dogBreedsApi = dogBreedsApi;
             _dialogService = dialogService;
+            _dispatcherService = dispatcherService;
 
             _dogBreedsApi.ReceivedDogImage += DogBreedsApi_ReceivedDogImage;
         }
@@ -72,7 +74,7 @@ namespace Dog_Browser.ViewModels
                 return;
             }
 
-            App.Current.Dispatcher.Invoke(() =>
+            _dispatcherService.Invoke(() =>
             {
                 ImageSource = ImageHelper.CreateImageSource(e.Result.Value.ImageBytes);
 

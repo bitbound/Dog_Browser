@@ -26,7 +26,7 @@ namespace Dog_Browser.Mvvm
             get
             {
 
-                var viewModel = new BreedBrowserViewModel(new DogBreedsApiStub(), new DialogServiceStub());
+                var viewModel = new BreedBrowserViewModel(new DogBreedsApiStub(), new DialogServiceStub(), new DispatcherServiceStub());
                 var result = JsonSerializer.Deserialize<ApiResponseResult<Dictionary<string, string[]>>>(SampleResponses.AllBreeds);
 
                 if (result?.Message is null)

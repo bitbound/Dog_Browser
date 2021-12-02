@@ -56,6 +56,9 @@ namespace Dog_Browser
                 collection.AddSingleton<IFileSystem, FileSystem>();
                 collection.AddSingleton<ISystemTime, SystemTime>();
 
+                // So we can mock calls to the UI dispatcher.
+                collection.AddSingleton<IDispatcherService, DispatcherService>();
+
                 // Lets us mock MessageBox.Show when unit-testing view models.
                 collection.AddSingleton<IDialogService, DialogService>();
 

@@ -14,15 +14,16 @@ namespace Dog_Browser.Services
 
     public class DialogService : IDialogService
     {
+        private readonly IDispatcherService _dispatcherService;
+
+        public DialogService(IDispatcherService dispatcherService)
+        {
+            _dispatcherService = dispatcherService;
+        }
 
         public MessageBoxResult Show(string message, string caption, MessageBoxButton buttons, MessageBoxImage image)
         {
-            if (App.Current?.Dispatcher is null)
-            {
-                return MessageBoxResult.None;
-            }
-
-            return App.Current.Dispatcher.Invoke(() =>
+            return _dispatcherService.Invoke(() =>
             {
                 return MessageBox.Show(message, caption, buttons, image);
             });
