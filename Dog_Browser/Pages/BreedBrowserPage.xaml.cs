@@ -32,6 +32,11 @@ namespace Dog_Browser.Pages
 
         private void GroupingButton_Checked(object sender, RoutedEventArgs e)
         {
+            if (BreedsListView?.Items?.GroupDescriptions is null)
+            {
+                return;
+            }
+
             BreedsListView.Items.GroupDescriptions.Clear();
             var description = new PropertyGroupDescription("PrimaryBreed");
             BreedsListView.Items.GroupDescriptions.Add(description);
